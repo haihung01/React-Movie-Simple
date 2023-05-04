@@ -19,7 +19,7 @@ const MovieList = ({ type = 'now_playing' }) => {
     // }, [data]);
     // // console.log(data.results)
 
-
+    // console.log(data)
     return (
         <div className="movie-list">
             <Swiper grabCursor={'true'} spaceBetween={40} slidesPerView={'auto'}>
