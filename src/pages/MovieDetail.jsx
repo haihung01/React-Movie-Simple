@@ -1,19 +1,18 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
-import { apiKey, fetcher } from '../config';
+import { apiKey, fetcher, tmdbAPI } from '../config';
 import { SwiperSlide, Swiper } from 'swiper/react';
-
 import MovieCard from '../components/movie/MovieCard';
+
 
 const MovieDetail = () => {
     const { movieId } = useParams();
-    const { data, error } = useSWR(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`, fetcher);
+    const { data, error } = useSWR(
+        tmdbAPI.getMovieDetails(movieId), fetcher);
 
     if (!data) return null;
     const { backdrop_path, poster_path, title, genres, overview } = data;
-
-    // console.log("moviedetails~ data", data)
 
     const backgroundImageUrl = data && data.backdrop_path
         ? `url(https://image.tmdb.org/t/p/original/${backdrop_path})`
@@ -61,7 +60,7 @@ const MovieDetail = () => {
 
 function MovieCredits() {
     const { movieId } = useParams();
-    const { data, error } = useSWR(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`, fetcher);
+    const { data, error } = useSWR(tmdbAPI.getMovieCredits(movieId), fetcher);
 
     if (!data) return null;
     const { cast } = data;
@@ -90,7 +89,7 @@ function MovieCredits() {
 
 function MovieVideos() {
     const { movieId } = useParams();
-    const { data, error } = useSWR(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`, fetcher);
+    const { data, error } = useSWR(tmdbAPI.getMovieVideos(movieId), fetcher);
 
     if (!data) return null;
     const { results } = data;
@@ -123,7 +122,7 @@ function MovieVideos() {
 
 function MovieSimilar() {
     const { movieId } = useParams();
-    const { data, error } = useSWR(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${apiKey}`, fetcher);
+    const { data, error } = useSWR(tmdbAPI.getMovieSimilar(movieId), fetcher);
 
     if (!data) return null;
     const { results } = data;
@@ -146,6 +145,5 @@ function MovieSimilar() {
     )
 }
 
-// https://api.themoviedb.org/3/movie/{movie_id}/similar?api_key=<<api_key>>&language=en-US&page=1
 
 export default MovieDetail;

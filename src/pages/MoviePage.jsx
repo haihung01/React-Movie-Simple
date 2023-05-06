@@ -25,7 +25,7 @@ const MoviePage = () => {
 
     const [url, setUrl] = useState(`https://api.themoviedb.org/3/movie/popular?api_key=e6ae53f90f39ad4d8584385a580100da&page=${nextPage}`);
 
-    const filterDebounce = useDebounce(filter, 1000);
+    const filterDebounce = useDebounce(filter, 500);
 
     const handleFilterChange = (e) => {
         setFilter(e.target.value);
@@ -51,18 +51,19 @@ const MoviePage = () => {
     const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
-        if (!data || !data.total_pages) return;
+        if (!data || !data.total_results) return;
         const endOffset = itemOffset + itemsPerPage;
-        setPageCount(Math.ceil(data.total_pages / itemsPerPage));
+        setPageCount(Math.ceil(data.total_results / itemsPerPage));
     }, [data, itemOffset])
 
 
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % data.total_pages;
+        const newOffset = (event.selected * itemsPerPage) % data.total_results;
         setItemOffset(newOffset);
         setNextPage(event.selected + 1);
     };
 
+    // console.log(data)
 
 
     return (
