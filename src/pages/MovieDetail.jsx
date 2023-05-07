@@ -8,14 +8,14 @@ import MovieCard from '../components/movie/MovieCard';
 
 const MovieDetail = () => {
     const { movieId } = useParams();
-    const { data, error } = useSWR(
+    const { data } = useSWR(
         tmdbAPI.getMovieDetails(movieId), fetcher);
 
     if (!data) return null;
     const { backdrop_path, poster_path, title, genres, overview } = data;
 
     const backgroundImageUrl = data && data.backdrop_path
-        ? `url(https://image.tmdb.org/t/p/original/${backdrop_path})`
+        ? `url(${tmdbAPI.imageOriginal(backdrop_path)})`
         : '';
 
     return (
@@ -30,7 +30,7 @@ const MovieDetail = () => {
 
             <div className="w-full h-[400px] max-w-[800px] mx-auto -mt-[200px] relative z-10 pb-10">
                 <img
-                    src={`https://image.tmdb.org/t/p/original/${poster_path}`}
+                    src={tmdbAPI.imageOriginal(poster_path)}
                     alt=''
                     className="w-full h-full object-cover rounded-xl"
                 />
@@ -60,7 +60,7 @@ const MovieDetail = () => {
 
 function MovieCredits() {
     const { movieId } = useParams();
-    const { data, error } = useSWR(tmdbAPI.getMovieCredits(movieId), fetcher);
+    const { data } = useSWR(tmdbAPI.getMovieCredits(movieId), fetcher);
 
     if (!data) return null;
     const { cast } = data;
@@ -75,7 +75,7 @@ function MovieCredits() {
                 {cast.slice(0, 4).map(item => (
                     <div key={item.id} className='cast-item'>
                         <img
-                            src={`https://image.tmdb.org/t/p/original/${item.profile_path}`}
+                            src={tmdbAPI.imageOriginal(item.profile_path)}
                             className='w-full h-[350px] object-cover rounded-lg mb-3'
                             alt='' />
                         <h3 className='text-xl font-medium'>{item.name}</h3>
@@ -89,7 +89,7 @@ function MovieCredits() {
 
 function MovieVideos() {
     const { movieId } = useParams();
-    const { data, error } = useSWR(tmdbAPI.getMovieVideos(movieId), fetcher);
+    const { data } = useSWR(tmdbAPI.getMovieVideos(movieId), fetcher);
 
     if (!data) return null;
     const { results } = data;
@@ -122,7 +122,7 @@ function MovieVideos() {
 
 function MovieSimilar() {
     const { movieId } = useParams();
-    const { data, error } = useSWR(tmdbAPI.getMovieSimilar(movieId), fetcher);
+    const { data } = useSWR(tmdbAPI.getMovieSimilar(movieId), fetcher);
 
     if (!data) return null;
     const { results } = data;
